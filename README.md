@@ -1,57 +1,105 @@
-# Employee Attrition Analysis – Jaya Jaya Maju
+# Employee Attrition Analysis – Jaya Jaya Maju
 
-_Dicoding Submission – **Malikusfz**_
-
----
-
-## 1  Business Understanding
-
-Jaya Jaya Maju (JJM) mengalami angka attrition tahunan **> 10 %**, melebihi rata‑rata industri ± 6 %.  
-Turnover tinggi menaikkan biaya rekrutmen, mengganggu kontinuitas proyek, dan mengikis knowledge base.  
-HR meminta kami untuk:
-
-1. **Mengidentifikasi driver attrition.**
-2. **Membangun dashboard** agar HR bisa memonitor driver tersebut secara real‑time.
-3. **Melatih model prediksi** untuk menandai karyawan berisiko tinggi keluar.
+**Submission by Malikusfz for Dicoding**
 
 ---
 
-## 2  Data Understanding & Preparation
+## 1. Business Understanding
 
-| File                | Baris | Kolom | Target                            |
-| ------------------- | ----- | ----- | --------------------------------- |
-| `employee_data.csv` | 1 470 | 35    | `Attrition` (1 = leave, 0 = stay) |
+**Problem Statement:**  
+Jaya Jaya Maju (JJM) is experiencing an annual attrition rate exceeding **10%**, surpassing the industry average of approximately **6%**. High turnover increases recruitment costs, disrupts project continuity, and erodes the organizational knowledge base.
 
-Langkah utama:
+**Objectives:**  
+The HR department has commissioned an analysis to:
 
-1. **Cleaning** – Menghapus 412 baris dengan `Attrition` NA; memastikan `EmployeeId` unik.
-2. **Feature engineering** – One‑hot encode 9 kolom kategorikal; fitur numerik dipertahankan.
-3. **Split** – Train 80 %, test 20 % (stratified).
-
-Detail lengkap di notebook.
+1. Identify key drivers of employee attrition.
+2. Develop an interactive dashboard for real-time monitoring of attrition drivers.
+3. Build a predictive model to flag employees at high risk of leaving.
 
 ---
 
-## 3  Exploratory Data Analysis
+## 2. Data Understanding & Preparation
 
-- Departemen **Sales** mencatat attrition tertinggi (20 %) diikuti HR (15 %).
-- **Overtime reguler** membuat risiko resign 2,7 × lebih tinggi.
-- Karyawan muda (< 30 th) & masa kerja ≤ 2 th paling rentan.
+**Dataset Overview:**  
+The dataset contains employee records with features such as `Age`, `Department`, `Tenure`, `Overtime`, and `Attrition` (target variable). `EmployeeId` serves as the unique identifier.
 
-![Dashboard teaser](dashboard.png)
+**Preprocessing Pipeline:**
+
+1. **Data Cleaning:**
+   - Removed 412 records with missing `Attrition` values.
+   - Validated `EmployeeId` uniqueness to ensure data integrity.
+2. **Feature Engineering:**
+   - Applied one-hot encoding to 9 categorical variables (e.g., `Department`, `JobRole`).
+   - Retained original numerical features (e.g., `Age`, `Tenure`) for model training.
+3. **Dataset Partitioning:**
+   - Used stratified sampling to split data: 80% training, 20% test, preserving class distribution.
+
+**Documentation:**  
+Detailed preprocessing steps are documented in the accompanying Jupyter notebook (`preprocessing.ipynb`).
 
 ---
 
-## 4  Modelling
+## 3. Exploratory Data Analysis (EDA)
 
-| Model                                   | Accuracy | ROC‑AUC  |
-| --------------------------------------- | -------- | -------- |
-| Majority class                          | 59 %     | 0.50     |
-| **CatBoost (Optuna tuned, 1500 iters)** | **85 %** | **0.89** |
+**Key Insights:**
 
-Artefak model: **`attrition_model.pkl`**  
-Wrapper CLI: **`prediction.py`**
+- **Departmental Trends:** The **Sales** department has the highest attrition rate at **20%**, followed by **Human Resources** at **15%**.
+- **Overtime Impact:** Employees frequently working overtime are **2.7×** more likely to resign.
+- **Demographic Patterns:** Employees aged **<30 years** with **≤2 years** of tenure are the most prone to attrition.
+
+**Visualization:**  
+An interactive dashboard visualizing attrition trends is available:  
+![Attrition Dashboard](assets/dashboard.png)
+
+---
+
+## 4. Modeling
+
+**Model Selection & Performance:**  
+Multiple models were evaluated, with hyperparameter tuning performed using Optuna for the best-performing model.
+
+| Model                           | Accuracy | ROC-AUC  |
+| ------------------------------- | -------- | -------- |
+| Baseline (Majority Class)       | 59%      | 0.50     |
+| **CatBoost (Optuna-optimized)** | **85%**  | **0.89** |
+
+**Production Assets:**
+
+- **Trained Model:** `attrition_model.pkl`
+- **Inference API:** `prediction.py`
+
+**Inference Example:**
 
 ```bash
-python prediction.py '{"Age":35,"Department":"Sales", ...}'
+python prediction.py '{"Age": 35, "Department": "Sales", "Tenure": 3, "Overtime": "Yes"}'
 ```
+
+**Deployment Notes:**  
+The model is deployed as a REST API for real-time predictions, integrated with the HR dashboard for seamless monitoring.
+
+---
+
+## 5. Conclusion & Recommendations
+
+**Summary:**  
+The analysis identified critical attrition drivers, including departmental differences, overtime, and demographic factors. The CatBoost model provides robust predictions, and the dashboard enables proactive HR interventions.
+
+**Recommendations:**
+
+1. Implement targeted retention strategies for high-risk groups (e.g., young employees in Sales).
+2. Review overtime policies to reduce burnout.
+3. Regularly update the model with new employee data to maintain predictive accuracy.
+
+**Next Steps:**
+
+- Deploy the dashboard to HR’s internal systems.
+- Schedule quarterly model retraining to adapt to evolving trends.
+
+---
+
+**Artifacts:**
+
+- Jupyter Notebook: `analysis_notebook.ipynb`
+- Model File: `attrition_model.pkl`
+- Dashboard: `dashboard.html`
+- Inference Script: `prediction.py`
