@@ -49,7 +49,7 @@ Detailed preprocessing steps are documented in the accompanying Jupyter notebook
 
 **Visualization:**  
 An interactive dashboard visualizing attrition trends is available:  
-![Attrition Dashboard](dashboard.png)
+![Dashboard teaser](dashboard.png)
 
 ---
 
