@@ -38,7 +38,7 @@ Detail lengkap di notebook.
 - **Overtime reguler** membuat risiko resign 2,7 × lebih tinggi.
 - Karyawan muda (< 30 th) & masa kerja ≤ 2 th paling rentan.
 
-![Dashboard teaser](Malikusfz-dashboard.png)
+![Dashboard teaser](dashboard.png)
 
 ---
 
